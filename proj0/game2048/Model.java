@@ -114,32 +114,32 @@ public class Model extends Observable {
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
         for (int i = 0; i < this.size(); i++) {
-            int bottom = 0;
-            Tile bottom_tile = this.tile(side.col(0, i, this.size()), side.row(0, i, this.size()));
-            int bottom_val = bottom_tile == null ?
-                    0 : bottom_tile.value();
-            for (int j = 0; j < this.size(); j++) {
-                Tile tmp_tile = this.tile(side.col(j, i, this.size()), side.row(j, i, this.size()));
+            int bottom = this.size() - 1;
+            int bottom_val = this.tile(side.col(i, bottom, this.size()), side.row(i, bottom, this.size())) == null ?
+                    0 : this.tile(side.col(i, bottom, this.size()), side.row(i, bottom, this.size())).value();
+            for (int j = bottom; j >= 0; j--) {
+                Tile tmp_tile = this.tile(side.col(i, j, this.size()), side.row(i, j, this.size()));
                 if (tmp_tile == null) {
                     continue;
                 }
                 if (bottom_val == 0) {
-                    bottom_tile = tmp_tile.move(side.col(bottom, i, this.size()), side.row(bottom, i, this.size()));
-                    bottom_val = bottom_tile.value();
-                    bottom += 1;
+                    bottom_val = tmp_tile.value();
+                    this.board.move(side.col(i, bottom, this.size()), side.row(i, bottom, this.size()), tmp_tile);
                     changed = true;
-                } else if (bottom_val == tmp_tile.value()) {
+                } else if (bottom_val == tmp_tile.value() && bottom != j) {
                     this.score += 2 * bottom_val;
-                    bottom_tile = bottom_tile.merge(side.col(bottom, i, this.size()), side.row(bottom, i, this.size())
-                            , tmp_tile);
-                    bottom_val = bottom_tile.value();
+                    this.board.move(side.col(i, bottom, this.size()), side.row(i, bottom, this.size()), tmp_tile);
+                    bottom_val = 0;
+                    bottom -= 1;
                     changed = true;
-                } else if (j > bottom + 1) {
-                    bottom_tile = tmp_tile.move(side.col(bottom + 1, i, this.size())
-                            , side.row(bottom + 1, i, this.size()));
-                    bottom_val = bottom_tile.value();
-                    bottom += 1;
+                } else if (j < bottom - 1) {
+                    bottom_val = tmp_tile.value();
+                    this.board.move(side.col(i, bottom - 1, this.size()), side.row(i, bottom - 1, this.size()), tmp_tile);
+                    bottom -= 1;
                     changed = true;
+                } else {
+                    bottom_val = tmp_tile.value();
+                    bottom = j;
                 }
             }
         }
@@ -206,10 +206,12 @@ public class Model extends Observable {
         if (emptySpaceExists(b)) {
             return true;
         }
-        for (int i = 0; i < b.size() - 1; i++) {
-            for (int j = 0; j < b.size() - 1; j++) {
-                if (b.tile(i, j).value() == b.tile(i + 1, j).value()
-                        || b.tile(i, j).value() == b.tile(i, j + 1).value()) {
+        for (int i = 0; i < b.size(); i++) {
+            for (int j = 0; j < b.size(); j++) {
+                if (i < b.size() - 1 && b.tile(i, j).value() == b.tile(i + 1, j).value()) {
+                    return true;
+                }
+                if (j < b.size() - 1 && b.tile(i, j).value() == b.tile(i, j + 1).value()) {
                     return true;
                 }
             }
