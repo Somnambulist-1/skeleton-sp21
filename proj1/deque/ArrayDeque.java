@@ -52,7 +52,7 @@ public class ArrayDeque<T> {
         items[nextFirst] = item;
         nextFirst -= 1;
         if (nextFirst == -1) {
-            nextFirst = size - 1;
+            nextFirst = Maxsize - 1;
         }
         size += 1;
         check_resize();
@@ -95,6 +95,7 @@ public class ArrayDeque<T> {
         int pos = (nextFirst + 1) % Maxsize;
         nextFirst = pos;
         T result = items[pos];
+        items[pos] = null;
         size -= 1;
         check_resize();
         return result;
@@ -107,6 +108,7 @@ public class ArrayDeque<T> {
         int pos = (nextLast - 1 + Maxsize) % Maxsize;
         nextLast = pos;
         T result = items[pos];
+        items[pos] = null;
         size -= 1;
         check_resize();
         return result;
@@ -132,7 +134,7 @@ public class ArrayDeque<T> {
         }
 
         public T next() {
-            T result = get(pos);
+            T result = items[pos];
             pos = (pos + 1) % Maxsize;
             return result;
         }

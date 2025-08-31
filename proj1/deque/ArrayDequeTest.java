@@ -1,5 +1,6 @@
 package deque;
 
+import edu.princeton.cs.algs4.StdRandom;
 import org.checkerframework.checker.units.qual.A;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -128,5 +129,23 @@ public class ArrayDequeTest {
         for (int i = 0; i < 29; i++) {
             t1.removeFirst();
         }
+    }
+
+    @Test
+    public void fillupandempty() {
+        ArrayDeque<Integer> AD = new ArrayDeque<>();
+        AD.addLast(1);
+        AD.addLast(1);
+        AD.addLast(1);
+        assertEquals(1, (int) AD.removeFirst());
+        assertEquals(1, (int) AD.removeLast());
+        assertEquals(1, (int) AD.removeLast());
+        AD.addLast(1);
+        AD.addLast(1);
+        AD.addLast(1);
+        assertEquals(1, (int) AD.removeFirst());
+        assertEquals(1, (int) AD.removeFirst());
+        assertEquals(1, (int) AD.removeFirst());
+        assertEquals(null, AD.removeFirst());
     }
 }
