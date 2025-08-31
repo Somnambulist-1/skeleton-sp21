@@ -6,7 +6,7 @@ public class LinkedListDeque<T> {
     private int size;
     private Tnode sentinel;
 
-    public class Tnode{
+    private class Tnode{
         public T item;
         public Tnode previous, next;
 
