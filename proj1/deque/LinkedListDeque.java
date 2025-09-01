@@ -123,7 +123,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         }
 
         public boolean hasNext() {
-            return this.pos < size - 1;
+            return this.pos < size;
         }
 
         public T next() {
