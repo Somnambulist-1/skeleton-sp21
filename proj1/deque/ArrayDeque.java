@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T>implements Deque<T> {
+public class ArrayDeque<T>implements Deque<T>, Iterable<T> {
     private T[] items;
     private int nextFirst, nextLast, size, maxSize;
 
@@ -127,17 +127,19 @@ public class ArrayDeque<T>implements Deque<T> {
 
     private class ADequeIter implements Iterator<T> {
         int pos;
+        int count = 0;
 
         public ADequeIter() {
             pos = (nextFirst + 1) % maxSize;
         }
 
         public boolean hasNext() {
-            return pos != nextLast;
+            return count < size;
         }
 
         public T next() {
             T result = items[pos];
+            count += 1;
             pos = (pos + 1) % maxSize;
             return result;
         }
