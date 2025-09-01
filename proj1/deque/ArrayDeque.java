@@ -2,48 +2,48 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T> implements Deque<T>{
+public class ArrayDeque<T>implements Deque<T> {
     private T[] items;
-    private int nextFirst, nextLast, size, Maxsize;
+    private int nextFirst, nextLast, size, maxSize;
 
     public ArrayDeque() {
         items = (T[]) new Object[8];
         size = 0;
         nextFirst = 4;
         nextLast = 5;
-        Maxsize = 8;
+        maxSize = 8;
     }
 
-    private void check_resize() {
-        if (size == Maxsize) {
+    private void checkResize() {
+        if (size == maxSize) {
             T[] tmp = (T[]) new Object[size * 2];
-            int ptr = (nextFirst + 1) % Maxsize;
+            int ptr = (nextFirst + 1) % maxSize;
             for (int i = 0; i < size; i++) {
                 tmp[i] = items[ptr];
                 ptr += 1;
-                if (ptr >= Maxsize) {
+                if (ptr >= maxSize) {
                     ptr = 0;
                 }
             }
             items = tmp;
-            Maxsize *= 2;
-            nextFirst = Maxsize - 1;
+            maxSize *= 2;
+            nextFirst = maxSize - 1;
             nextLast = size;
             return;
         }
-        if (size < Maxsize / 4 && Maxsize >= 16) {
-            T[] tmp = (T[]) new Object[Maxsize / 4];
-            int ptr = (nextFirst + 1) % Maxsize;
+        if (size < maxSize / 4 && maxSize >= 16) {
+            T[] tmp = (T[]) new Object[maxSize / 4];
+            int ptr = (nextFirst + 1) % maxSize;
             for (int i = 0; i < size; i++) {
                 tmp[i] = items[ptr];
                 ptr += 1;
-                if (ptr >= Maxsize) {
+                if (ptr >= maxSize) {
                     ptr = 0;
                 }
             }
             items = tmp;
-            Maxsize /= 4;
-            nextFirst = Maxsize - 1;
+            maxSize /= 4;
+            nextFirst = maxSize - 1;
             nextLast = size;
         }
     }
@@ -53,10 +53,10 @@ public class ArrayDeque<T> implements Deque<T>{
         items[nextFirst] = item;
         nextFirst -= 1;
         if (nextFirst == -1) {
-            nextFirst = Maxsize - 1;
+            nextFirst = maxSize - 1;
         }
         size += 1;
-        check_resize();
+        checkResize();
     }
 
     @Override
@@ -64,8 +64,8 @@ public class ArrayDeque<T> implements Deque<T>{
         items[nextLast] = item;
         nextLast += 1;
         size += 1;
-        check_resize();
-        if (nextLast == Maxsize) {
+        checkResize();
+        if (nextLast == maxSize) {
             nextLast = 0;
         }
     }
@@ -81,7 +81,7 @@ public class ArrayDeque<T> implements Deque<T>{
         for (int i = 0; i < size; i++) {
             System.out.print(items[ptr] + " ");
             ptr += 1;
-            if (ptr >= Maxsize) {
+            if (ptr >= maxSize) {
                 ptr = 0;
             }
         }
@@ -93,12 +93,12 @@ public class ArrayDeque<T> implements Deque<T>{
         if (size == 0) {
             return null;
         }
-        int pos = (nextFirst + 1) % Maxsize;
+        int pos = (nextFirst + 1) % maxSize;
         nextFirst = pos;
         T result = items[pos];
         items[pos] = null;
         size -= 1;
-        check_resize();
+        checkResize();
         return result;
     }
 
@@ -107,29 +107,29 @@ public class ArrayDeque<T> implements Deque<T>{
         if (size == 0) {
             return null;
         }
-        int pos = (nextLast - 1 + Maxsize) % Maxsize;
+        int pos = (nextLast - 1 + maxSize) % maxSize;
         nextLast = pos;
         T result = items[pos];
         items[pos] = null;
         size -= 1;
-        check_resize();
+        checkResize();
         return result;
     }
 
     @Override
     public T get(int index) {
-        return items[(nextFirst + index + 1) % Maxsize];
+        return items[(nextFirst + index + 1) % maxSize];
     }
 
     public Iterator<T> iterator() {
         return new ADequeIter();
     }
 
-    public class ADequeIter implements Iterator<T> {
+    private class ADequeIter implements Iterator<T> {
         int pos;
 
         public ADequeIter() {
-            pos = (nextFirst + 1) % Maxsize;
+            pos = (nextFirst + 1) % maxSize;
         }
 
         public boolean hasNext() {
@@ -138,17 +138,17 @@ public class ArrayDeque<T> implements Deque<T>{
 
         public T next() {
             T result = items[pos];
-            pos = (pos + 1) % Maxsize;
+            pos = (pos + 1) % maxSize;
             return result;
         }
     }
 
     public boolean equals(Object o) {
-        if (!(o instanceof ArrayDeque)) {
+        if (!(o instanceof Deque)) {
             return false;
         }
-        ArrayDeque<T> other = (ArrayDeque<T>) o;
-        if (other.size() != size) {
+        Deque<T> other = (Deque<T>) o;
+        if (this.size() != other.size()) {
             return false;
         }
         Iterator<T> me = this.iterator();

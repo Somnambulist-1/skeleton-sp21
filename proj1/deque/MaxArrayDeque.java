@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 public class MaxArrayDeque<T> extends ArrayDeque<T> {
 
-    public Comparator<T> pred;
+    private Comparator<T> pred;
 
     public MaxArrayDeque(Comparator<T> c) {
         pred = c;
