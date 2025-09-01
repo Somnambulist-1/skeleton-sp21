@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class LinkedListDeque<T>implements Deque<T>, Iterable<T> {
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     private int size;
     private Tnode sentinel;
 
@@ -137,12 +137,12 @@ public class LinkedListDeque<T>implements Deque<T>, Iterable<T> {
         if (!(o instanceof Deque)) {
             return false;
         }
-        Deque<T> other = (Deque<T>) o;
+        Deque<?> other = (Deque<?>) o;
         if (this.size() != other.size()) {
             return false;
         }
         Iterator<T> me = this.iterator();
-        Iterator<T> he = other.iterator();
+        Iterator<?> he = other.iterator();
         while (me.hasNext()) {
             if (me.next() != he.next()) {
                 return false;
