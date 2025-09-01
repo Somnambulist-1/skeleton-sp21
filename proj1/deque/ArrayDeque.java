@@ -2,9 +2,9 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T> {
-    public T[] items;
-    public int nextFirst, nextLast, size, Maxsize;
+public class ArrayDeque<T> implements Deque<T>{
+    private T[] items;
+    private int nextFirst, nextLast, size, Maxsize;
 
     public ArrayDeque() {
         items = (T[]) new Object[8];
@@ -48,6 +48,7 @@ public class ArrayDeque<T> {
         }
     }
 
+    @Override
     public void addFirst(T item) {
         items[nextFirst] = item;
         nextFirst -= 1;
@@ -58,6 +59,7 @@ public class ArrayDeque<T> {
         check_resize();
     }
 
+    @Override
     public void addLast(T item) {
         items[nextLast] = item;
         nextLast += 1;
@@ -68,14 +70,12 @@ public class ArrayDeque<T> {
         }
     }
 
+    @Override
     public int size() {
         return size;
     }
 
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
+    @Override
     public void printDeque() {
         int ptr = nextFirst + 1;
         for (int i = 0; i < size; i++) {
@@ -88,6 +88,7 @@ public class ArrayDeque<T> {
         System.out.print("\n");
     }
 
+    @Override
     public T removeFirst() {
         if (size == 0) {
             return null;
@@ -101,6 +102,7 @@ public class ArrayDeque<T> {
         return result;
     }
 
+    @Override
     public T removeLast() {
         if (size == 0) {
             return null;
@@ -114,6 +116,7 @@ public class ArrayDeque<T> {
         return result;
     }
 
+    @Override
     public T get(int index) {
         return items[(nextFirst + index + 1) % Maxsize];
     }
