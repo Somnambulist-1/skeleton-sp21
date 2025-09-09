@@ -4,7 +4,7 @@ import java.util.*;
 
 /** Try to implement a LLRB-BST */
 
-public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
+public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     private class BSTNode {
         K key;
@@ -170,7 +170,7 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
     private int size = 0;
 
     private class BSTMapIter implements Iterator<K>{
-        Stack<BSTNode> stack;
+        Stack<BSTNode> stack = new Stack<>();
         public BSTMapIter() {
             BSTNode cur = root;
             while (cur != null) {
@@ -292,5 +292,12 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
     @Override
     public Iterator<K> iterator() {
         return new BSTMapIter();
+    }
+
+    public void printInOrder() {
+        for (K k : this) {
+            System.out.print(k + " ");
+        }
+        System.out.print("\n");
     }
 }
